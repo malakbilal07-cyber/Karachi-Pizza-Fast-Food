@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Karachi Pizza &amp; Fast Food — POS</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍕</text></svg>">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ======================= LOGIN SCREEN ======================= -->
+<div id="loginScreen" class="login-screen">
+  <div class="login-card">
+    <div class="brand">
+      <div class="brand-mark">KP</div>
+      <div class="brand-text">
+        <h1>KARACHI <span>PIZZA</span> &amp; FAST FOOD</h1>
+        <p>Internal Order &amp; Billing System</p>
+      </div>
+    </div>
+    <form id="loginForm">
+      <label>Staff PIN
+        <input type="password" id="pinInput" inputmode="numeric" maxlength="6" placeholder="••••" autocomplete="off" required>
+      </label>
+      <button type="submit" class="btn-primary">Enter System</button>
+      <p class="login-hint">Default PIN: <strong>1234</strong> — change it in Settings after login.</p>
+    </form>
+  </div>
+</div>
+
+<!-- ======================= APP SHELL ======================= -->
+<div id="app" class="app hidden">
+
+  <!-- Sidebar -->
+  <nav class="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-mark small">KP</div>
+      <div>
+        <strong>Karachi Pizza</strong>
+        <span>&amp; Fast Food</span>
+      </div>
+    </div>
+
+    <ul class="nav-list">
+      <li><button class="nav-btn active" data-view="order">
+        <svg viewBox="0 0 24 24"><path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.3 4.6A1 1 0 0 0 5.6 19H17M17 19a2 2 0 1 0 4 0 2 2 0 0 0-4 0zM9 19a2 2 0 1 0 4 0 2 2 0 0 0-4 0z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        New Order</button></li>
+      <li><button class="nav-btn" data-view="bills">
+        <svg viewBox="0 0 24 24"><path d="M6 2h9l3 3v17H6zM15 2v3h3M9 9h6M9 12h6M9 15h4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Bills / Orders</button></li>
+      <li><button class="nav-btn" data-view="daily">
+        <svg viewBox="0 0 24 24"><path d="M3 12h4l2-7 4 14 2-7h6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Daily Sales</button></li>
+      <li><button class="nav-btn" data-view="monthly">
+        <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="17" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M3 9h18M8 2v4M16 2v4M7 13h3M7 17h3M14 13h3M14 17h3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        Monthly Sales</button></li>
+      <li><button class="nav-btn" data-view="menu-manager">
+        <svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20M4 4.5A2.5 2.5 0 0 1 6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Manage Menu</button></li>
+      <li><button class="nav-btn" data-view="settings">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9c.14.36.5.6.9.6H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Settings</button></li>
+    </ul>
+
+    <button id="logoutBtn" class="logout-btn">
+      <svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Log out
+    </button>
+  </nav>
+
+  <!-- Mobile top bar -->
+  <div class="mobile-topbar">
+    <button id="mobileMenuBtn" aria-label="Menu">☰</button>
+    <strong>Karachi Pizza POS</strong>
+  </div>
+
+  <!-- Main content -->
+  <main class="main">
+
+    <!-- ============ VIEW: NEW ORDER ============ -->
+    <section id="view-order" class="view active">
+      <header class="view-header">
+        <div>
+          <h2>New Order</h2>
+          <p class="sub">Select items, choose size where needed, and build the bill.</p>
+        </div>
+        <div class="order-meta">
+          <label>Order Type
+            <select id="orderType">
+              <option value="Dine-in">Dine-in</option>
+              <option value="Takeaway">Takeaway</option>
+              <option value="Delivery">Delivery</option>
+            </select>
+          </label>
+          <label>Table / Customer
+            <input type="text" id="orderCustomer" placeholder="Table # or name">
+          </label>
+        </div>
+      </header>
+
+      <div class="order-layout">
+        <div class="menu-pane">
+          <div class="category-tabs" id="categoryTabs"></div>
+          <div class="search-row">
+            <input type="search" id="menuSearch" placeholder="Search menu items…">
+          </div>
+          <div class="menu-grid" id="menuGrid"></div>
+        </div>
+
+        <aside class="cart-pane">
+          <div class="cart-head">
+            <h3>Current Bill</h3>
+            <button id="clearCartBtn" class="link-btn">Clear</button>
+          </div>
+          <div class="cart-items" id="cartItems">
+            <p class="empty-hint">No items added yet.</p>
+          </div>
+          <div class="cart-totals">
+            <div class="row"><span>Subtotal</span><span id="cartSubtotal">Rs 0</span></div>
+            <div class="row">
+              <span>Discount
+                <input type="number" id="discountInput" min="0" value="0"> <select id="discountType"><option value="pct">%</option><option value="flat">Rs</option></select>
+              </span>
+              <span id="cartDiscount">Rs 0</span>
+            </div>
+            <div class="row total"><span>Total</span><span id="cartTotal">Rs 0</span></div>
+          </div>
+          <div class="payment-row">
+            <label>Payment
+              <select id="paymentMethod">
+                <option value="Cash">Cash</option>
+                <option value="Card">Card</option>
+                <option value="Online">Online / Wallet</option>
+              </select>
+            </label>
+          </div>
+          <button id="chargeBtn" class="btn-primary btn-lg">Complete Order &amp; Print Bill</button>
+        </aside>
+      </div>
+    </section>
+
+    <!-- ============ VIEW: BILLS / ORDERS ============ -->
+    <section id="view-bills" class="view">
+      <header class="view-header">
+        <div>
+          <h2>Bills &amp; Orders</h2>
+          <p class="sub">All orders placed. Search, view, or reprint any bill.</p>
+        </div>
+        <div class="filters">
+          <input type="date" id="billsDateFilter">
+          <input type="search" id="billsSearch" placeholder="Search order #, customer…">
+          <button id="billsExportCsv" class="btn-outline">Export CSV</button>
+        </div>
+      </header>
+      <div class="table-wrap">
+        <table class="data-table" id="billsTable">
+          <thead>
+            <tr><th>Order #</th><th>Date/Time</th><th>Type</th><th>Customer</th><th>Items</th><th>Payment</th><th>Total</th><th></th></tr>
+          </thead>
+          <tbody id="billsTableBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ============ VIEW: DAILY SALES ============ -->
+    <section id="view-daily" class="view">
+      <header class="view-header">
+        <div>
+          <h2>Daily Sales</h2>
+          <p class="sub">Sales performance for a selected day.</p>
+        </div>
+        <div class="filters">
+          <input type="date" id="dailyDate">
+        </div>
+      </header>
+
+      <div class="stat-cards">
+        <div class="stat-card"><span class="label">Total Sales</span><span class="value" id="dailyTotalSales">Rs 0</span></div>
+        <div class="stat-card"><span class="label">Orders</span><span class="value" id="dailyOrderCount">0</span></div>
+        <div class="stat-card"><span class="label">Avg. Order Value</span><span class="value" id="dailyAvgOrder">Rs 0</span></div>
+        <div class="stat-card"><span class="label">Items Sold</span><span class="value" id="dailyItemsSold">0</span></div>
+      </div>
+
+      <div class="grid-2">
+        <div class="panel">
+          <h3>Sales by Category</h3>
+          <div id="dailyCategoryChart" class="bar-chart"></div>
+        </div>
+        <div class="panel">
+          <h3>Top Selling Items</h3>
+          <ol class="top-list" id="dailyTopItems"></ol>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h3>Orders on this day</h3>
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead><tr><th>Order #</th><th>Time</th><th>Type</th><th>Payment</th><th>Total</th></tr></thead>
+            <tbody id="dailyOrdersBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ VIEW: MONTHLY SALES ============ -->
+    <section id="view-monthly" class="view">
+      <header class="view-header">
+        <div>
+          <h2>Monthly Sales</h2>
+          <p class="sub">Sales performance across the month.</p>
+        </div>
+        <div class="filters">
+          <input type="month" id="monthlyMonth">
+        </div>
+      </header>
+
+      <div class="stat-cards">
+        <div class="stat-card"><span class="label">Total Sales</span><span class="value" id="monthlyTotalSales">Rs 0</span></div>
+        <div class="stat-card"><span class="label">Orders</span><span class="value" id="monthlyOrderCount">0</span></div>
+        <div class="stat-card"><span class="label">Avg. Order Value</span><span class="value" id="monthlyAvgOrder">Rs 0</span></div>
+        <div class="stat-card"><span class="label">Best Day</span><span class="value" id="monthlyBestDay">—</span></div>
+      </div>
+
+      <div class="panel">
+        <h3>Daily Breakdown</h3>
+        <div id="monthlyDailyChart" class="bar-chart tall"></div>
+      </div>
+
+      <div class="grid-2">
+        <div class="panel">
+          <h3>Sales by Category</h3>
+          <div id="monthlyCategoryChart" class="bar-chart"></div>
+        </div>
+        <div class="panel">
+          <h3>Top Selling Items</h3>
+          <ol class="top-list" id="monthlyTopItems"></ol>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ VIEW: MENU MANAGER ============ -->
+    <section id="view-menu-manager" class="view">
+      <header class="view-header">
+        <div>
+          <h2>Manage Menu</h2>
+          <p class="sub">Add, edit, or remove menu items and categories.</p>
+        </div>
+        <button id="addItemBtn" class="btn-primary">+ Add Item</button>
+      </header>
+      <div class="table-wrap">
+        <table class="data-table" id="menuManagerTable">
+          <thead><tr><th>Category</th><th>Item</th><th>Small</th><th>Medium</th><th>Large</th><th></th></tr></thead>
+          <tbody id="menuManagerBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ============ VIEW: SETTINGS ============ -->
+    <section id="view-settings" class="view">
+      <header class="view-header">
+        <div>
+          <h2>Settings</h2>
+          <p class="sub">Restaurant info, staff PIN, and data management.</p>
+        </div>
+      </header>
+
+      <div class="grid-2">
+        <div class="panel">
+          <h3>Restaurant Info</h3>
+          <label>Name <input type="text" id="setRestName"></label>
+          <label>Address <input type="text" id="setRestAddress"></label>
+          <label>WhatsApp Numbers <input type="text" id="setRestPhone"></label>
+          <button id="saveRestInfo" class="btn-primary">Save</button>
+        </div>
+        <div class="panel">
+          <h3>Change PIN</h3>
+          <label>New PIN (4-6 digits) <input type="password" id="setNewPin" maxlength="6"></label>
+          <button id="savePin" class="btn-primary">Update PIN</button>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h3>Data Management</h3>
+        <p class="sub">All data is stored locally in this browser. Back up regularly.</p>
+        <div class="btn-row">
+          <button id="exportDataBtn" class="btn-outline">Export All Data (JSON)</button>
+          <label class="btn-outline file-label">Import Data
+            <input type="file" id="importDataInput" accept=".json" hidden>
+          </label>
+          <button id="resetDataBtn" class="btn-danger">Reset All Data</button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- Item modal (size / qty picker) -->
+<div id="itemModal" class="modal-overlay hidden">
+  <div class="modal">
+    <h3 id="itemModalTitle">Item</h3>
+    <div id="itemModalSizes" class="size-options"></div>
+    <label class="qty-row">Quantity
+      <div class="qty-stepper">
+        <button type="button" id="qtyMinus">−</button>
+        <span id="qtyValue">1</span>
+        <button type="button" id="qtyPlus">+</button>
+      </div>
+    </label>
+    <label>Note (optional) <input type="text" id="itemNote" placeholder="e.g. extra spicy, no onions"></label>
+    <div class="modal-actions">
+      <button id="itemModalCancel" class="btn-outline">Cancel</button>
+      <button id="itemModalAdd" class="btn-primary">Add to Bill</button>
+    </div>
+  </div>
+</div>
+
+<!-- Menu item edit modal -->
+<div id="editItemModal" class="modal-overlay hidden">
+  <div class="modal">
+    <h3 id="editItemModalTitle">Add Item</h3>
+    <label>Category
+      <select id="editItemCategory"></select>
+    </label>
+    <label>Item Name <input type="text" id="editItemName"></label>
+    <div class="size-grid">
+      <label>Price (or Small) <input type="number" id="editItemPriceSmall" min="0"></label>
+      <label>Medium (optional) <input type="number" id="editItemPriceMed" min="0"></label>
+      <label>Large (optional) <input type="number" id="editItemPriceLarge" min="0"></label>
+    </div>
+    <div class="modal-actions">
+      <button id="editItemCancel" class="btn-outline">Cancel</button>
+      <button id="editItemSave" class="btn-primary">Save Item</button>
+    </div>
+  </div>
+</div>
+
+<!-- Bill receipt modal -->
+<div id="receiptModal" class="modal-overlay hidden">
+  <div class="modal receipt-modal">
+    <div id="receiptContent" class="receipt"></div>
+    <div class="modal-actions">
+      <button id="receiptClose" class="btn-outline">Close</button>
+      <button id="receiptPrint" class="btn-primary">Print</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast" class="toast hidden"></div>
+
+<script src="menu-data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
