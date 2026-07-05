@@ -251,7 +251,7 @@
       </header>
       <div class="table-wrap">
         <table class="data-table" id="menuManagerTable">
-          <thead><tr><th>Category</th><th>Item</th><th>Small</th><th>Medium</th><th>Large</th><th></th></tr></thead>
+          <thead><tr><th>Category</th><th>Item</th><th>Small</th><th>Medium</th><th>Large</th><th>Popular</th><th></th></tr></thead>
           <tbody id="menuManagerBody"></tbody>
         </table>
       </div>
@@ -330,6 +330,10 @@
       <label>Medium (optional) <input type="number" id="editItemPriceMed" min="0"></label>
       <label>Large (optional) <input type="number" id="editItemPriceLarge" min="0"></label>
     </div>
+    <label class="checkbox-row">
+      <input type="checkbox" id="editItemPopular">
+      Mark as 🔥 Popular (shows in the quick-access Popular tab)
+    </label>
     <div class="modal-actions">
       <button id="editItemCancel" class="btn-outline">Cancel</button>
       <button id="editItemSave" class="btn-primary">Save Item</button>

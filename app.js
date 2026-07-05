@@ -18,7 +18,8 @@ let state = {
   menu: [],
   categories: [],
   orders: [],
-  settings: { name: "Karachi Pizza & Fast Food", address: "", phone: "0310 0004829 / 0341 0001101" },
+  settings: { name: "Karachi Pizza & Fast Food", address: "", phone: "0310-0004829" },
+  heldOrders: [],    // parked orders for "Hold / Resume" feature
   cart: [],          // {itemId, name, category, size, unitPrice, qty, note}
   activeCategory: "All",
   pendingItem: null, // item being configured in modal
@@ -108,7 +109,7 @@ document.getElementById("mobileMenuBtn").addEventListener("click", ()=>{
    ========================================================== */
 function renderCategoryTabs(){
   const wrap = document.getElementById("categoryTabs");
-  const cats = ["All", ...state.categories];
+  const cats = ["All", "🔥 Popular", ...state.categories];
   wrap.innerHTML = cats.map(c =>
     `<button class="cat-tab ${c===state.activeCategory?'active':''}" data-cat="${c}">${c}</button>`
   ).join("");
@@ -125,7 +126,8 @@ function renderMenuGrid(){
   const grid = document.getElementById("menuGrid");
   const search = document.getElementById("menuSearch").value.trim().toLowerCase();
   let items = state.menu;
-  if (state.activeCategory !== "All") items = items.filter(i=>i.category===state.activeCategory);
+  if (state.activeCategory === "🔥 Popular") items = items.filter(i=>i.popular);
+  else if (state.activeCategory !== "All") items = items.filter(i=>i.category===state.activeCategory);
   if (search) items = items.filter(i=>i.name.toLowerCase().includes(search));
 
   if (!items.length){
@@ -507,6 +509,7 @@ function renderMenuManager(){
       <td class="mono">${item.small!=null ? money(item.small) : "-"}</td>
       <td class="mono">${item.medium!=null ? money(item.medium) : "-"}</td>
       <td class="mono">${item.large!=null ? money(item.large) : "-"}</td>
+      <td><button data-id="${item.id}" class="toggle-popular-btn" title="Toggle Popular">${item.popular ? "🔥" : "☆"}</button></td>
       <td>
         <button data-id="${item.id}" class="edit-item-btn">Edit</button>
         <button data-id="${item.id}" class="delete-item-btn">Delete</button>
@@ -527,6 +530,15 @@ function renderMenuManager(){
       }
     });
   });
+  body.querySelectorAll(".toggle-popular-btn").forEach(btn=>{
+    btn.addEventListener("click", ()=>{
+      const item = state.menu.find(i=>i.id===btn.dataset.id);
+      item.popular = !item.popular;
+      saveMenu();
+      renderMenuManager();
+      renderMenuGrid();
+    });
+  });
 }
 
 function populateCategorySelect(){
@@ -542,6 +554,7 @@ document.getElementById("addItemBtn").addEventListener("click", ()=>{
   document.getElementById("editItemPriceSmall").value = "";
   document.getElementById("editItemPriceMed").value = "";
   document.getElementById("editItemPriceLarge").value = "";
+  document.getElementById("editItemPopular").checked = false;
   document.getElementById("editItemModal").classList.remove("hidden");
 });
 
@@ -556,6 +569,7 @@ function openEditItemModal(id){
   document.getElementById("editItemPriceSmall").value = item.small ?? "";
   document.getElementById("editItemPriceMed").value = item.medium ?? "";
   document.getElementById("editItemPriceLarge").value = item.large ?? "";
+  document.getElementById("editItemPopular").checked = !!item.popular;
   document.getElementById("editItemModal").classList.remove("hidden");
 }
 document.getElementById("editItemCancel").addEventListener("click", ()=>{
@@ -574,7 +588,8 @@ document.getElementById("editItemSave").addEventListener("click", ()=>{
     name, category,
     small: Number(small),
     medium: medium === "" ? null : Number(medium),
-    large: large === "" ? null : Number(large)
+    large: large === "" ? null : Number(large),
+    popular: document.getElementById("editItemPopular").checked
   };
 
   if (state.editingMenuId){
