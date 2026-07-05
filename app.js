@@ -28,8 +28,30 @@ let state = {
 
 /* ---------------- Persistence ---------------- */
 function loadState() {
-  state.menu = JSON.parse(localStorage.getItem(STORAGE_KEYS.menu) || "null") || DEFAULT_MENU;
-  state.categories = JSON.parse(localStorage.getItem(STORAGE_KEYS.categories) || "null") || DEFAULT_CATEGORIES;
+  const savedMenu = JSON.parse(localStorage.getItem(STORAGE_KEYS.menu) || "null");
+  const savedCategories = JSON.parse(localStorage.getItem(STORAGE_KEYS.categories) || "null");
+
+  if (!savedMenu) {
+    // First-ever run on this browser: just use the defaults as-is.
+    state.menu = DEFAULT_MENU;
+  } else {
+    // Returning browser: keep everything the user already has (including
+    // their own edits/additions), but merge in any NEW items that were
+    // added to the code's default menu since they last loaded the app
+    // (matched by category + name so existing edits aren't touched/duplicated).
+    const existingKeys = new Set(savedMenu.map(i => (i.category + "|" + i.name).toLowerCase()));
+    const newItems = DEFAULT_MENU.filter(i => !existingKeys.has((i.category + "|" + i.name).toLowerCase()));
+    state.menu = savedMenu.concat(newItems);
+  }
+
+  if (!savedCategories) {
+    state.categories = DEFAULT_CATEGORIES;
+  } else {
+    const existingCats = new Set(savedCategories.map(c => c.toLowerCase()));
+    const newCats = DEFAULT_CATEGORIES.filter(c => !existingCats.has(c.toLowerCase()));
+    state.categories = savedCategories.concat(newCats);
+  }
+
   state.orders = JSON.parse(localStorage.getItem(STORAGE_KEYS.orders) || "[]");
   state.settings = JSON.parse(localStorage.getItem(STORAGE_KEYS.settings) || "null") || state.settings;
   if (!localStorage.getItem(STORAGE_KEYS.pin)) localStorage.setItem(STORAGE_KEYS.pin, "1234");

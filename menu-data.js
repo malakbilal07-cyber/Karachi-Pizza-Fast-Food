@@ -8,6 +8,7 @@
 const DEFAULT_CATEGORIES = [
   "BBQ",
   "Karahi",
+  "Handi (Boneless)",
   "Broast",
   "Pizza",
   "Shakes & Ice Cream",
@@ -41,6 +42,14 @@ const DEFAULT_MENU = [
   { id: uid("m"), category: "Karahi", name: "Beef Karahi (Half)", small: 1199, medium: null, large: null },
   { id: uid("m"), category: "Karahi", name: "Mutton Karahi (Full)", small: 3499, medium: null, large: null },
   { id: uid("m"), category: "Karahi", name: "Mutton Karahi (Half)", small: 1899, medium: null, large: null },
+
+  // ---------------- HANDI (BONELESS) ----------------
+  { id: uid("m"), category: "Handi (Boneless)", name: "Chicken Handi (Full)", small: 2000, medium: null, large: null },
+  { id: uid("m"), category: "Handi (Boneless)", name: "Chicken Handi (Half)", small: 1000, medium: null, large: null },
+  { id: uid("m"), category: "Handi (Boneless)", name: "Beef Handi (Full)", small: 1999, medium: null, large: null },
+  { id: uid("m"), category: "Handi (Boneless)", name: "Beef Handi (Half)", small: 1199, medium: null, large: null },
+  { id: uid("m"), category: "Handi (Boneless)", name: "Mutton Handi (Full)", small: 3299, medium: null, large: null },
+  { id: uid("m"), category: "Handi (Boneless)", name: "Mutton Handi (Half)", small: 1599, medium: null, large: null },
 
   // ---------------- BROAST (New) ----------------
   { id: uid("m"), category: "Broast", name: "Full Broast (8 pcs)", small: 1799, medium: null, large: null, popular: true },
